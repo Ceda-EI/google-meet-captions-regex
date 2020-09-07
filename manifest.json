@@ -1,15 +1,20 @@
 {
-  "manifest_version": 2,
-  "name": "Google Meet Caption Regex",
-  "version": "1.0",
+	"manifest_version": 2,
+	"name": "Google Meet Caption Regex",
+	"version": "1.0",
 
-  "description": "Send a notification when a caption in Google Meet matches a certain regex.",
+	"description": "Send a notification when a caption in Google Meet matches a certain regex.",
 
-  "content_scripts": [
-    {
-      "matches": ["https://meet.google.com/*"],
-      "js": ["gmcr.js"]
-    }
-  ]
+	"icons": {
+		"48": "icons/gmcr.svg",
+		"96": "icons/gmcr.svg"
+	},
+
+	"content_scripts": [
+		{
+			"matches": ["https://meet.google.com/*"],
+			"js": ["gmcr.js"]
+		}
+	]
 
 }
