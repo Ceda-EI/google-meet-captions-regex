@@ -4,10 +4,22 @@
 	"version": "1.0",
 
 	"description": "Send a notification when a caption in Google Meet matches a certain regex.",
+	"homepage_url": "https://gitlab.com/ceda_ei/google-meet-captions-regex",
+
+	"permission": [
+		"notification",
+		"storage"
+	],
 
 	"icons": {
 		"48": "icons/gmcr.svg",
 		"96": "icons/gmcr.svg"
+	},
+
+	"browser_action": {
+		"default_icon": "icons/gmcr.svg",
+		"default_title": "Google Meet Caption Regex",
+		"default_popup": "popup/build/index.html"
 	},
 
 	"content_scripts": [
