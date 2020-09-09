@@ -6,8 +6,8 @@
 	"description": "Send a notification when a caption in Google Meet matches a certain regex.",
 	"homepage_url": "https://gitlab.com/ceda_ei/google-meet-captions-regex",
 
-	"permission": [
-		"notification",
+	"permissions": [
+		"notifications",
 		"storage"
 	],
 
