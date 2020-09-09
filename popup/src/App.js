@@ -1,5 +1,5 @@
 /* global browser */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 function App() {
 	const [ advanced, setAdvanced ] = useState(undefined);
@@ -23,13 +23,13 @@ function App() {
 			words: [ setWords, ["attendance", "roll number", "present"] ],
 			regex: [ setRegex, "" ],
 			flags: [ setFlags, "" ]
-		}
+		};
 		Object.keys(setterDefaultValue).forEach(key => {
 			const [ setter, defaultValue ] = setterDefaultValue[key];
 			browser.storage.local.get(key)
 				.then(value => {
 					if (key in value)
-						setter(value[key])
+						setter(value[key]);
 					else {
 
 						browser.storage.local.set({ [key]: defaultValue });
@@ -76,14 +76,14 @@ function App() {
 				onChange={e => setAdvanced(e.target.checked)}
 				checked={advanced}
 			/>
-			<label for="toggle">Advanced Mode</label>
-			<div class="simple"
+			<label forName="toggle">Advanced Mode</label>
+			<div className="simple"
 				style={{
 					display: advanced ? "none": "block"
 				}}
 			>
 				<div
-					class="words"
+					className="words"
 					style={{
 						display: "flex",
 						flexWrap: "wrap",
@@ -93,7 +93,7 @@ function App() {
 				>
 					{words.map((word, idx) =>
 						<span
-							class="word"
+							className="word"
 							key={idx}
 							style={{
 								backgroundColor: "#B4FFEF",
@@ -138,14 +138,14 @@ function App() {
 							id="add-word-button"
 							onClick={e => {setWords([...words, word]); setWord(""); e.preventDefault();}}
 							type="submit"
-							enabled={word !== ""}
+							disabled={word === ""}
 						>
 							+
 						</button>
 					</div>
 				</form>
 			</div>
-			<div class="advanced"
+			<div className="advanced"
 				style={{
 					display: advanced ? "flex": "none",
 					alignItems: "baseline",
