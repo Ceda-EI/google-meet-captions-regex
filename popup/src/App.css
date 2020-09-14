@@ -1,0 +1,42 @@
+.toggle {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 0.3em;
+	align-items: center;
+}
+/* The switch - the box around the slider */
+
+.words {
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 0.3em;
+	width: 100%;
+}
+
+.word {
+	margin: 0 0.1em;
+}
+
+.word:first-child {
+	margin-left: 0;
+}
+
+.delete-word {
+	border-radius: 50%;
+	font-size: 0.7em;
+	background-color: #ccc;
+	cursor: pointer;
+	width: 1em;
+	height: 1em;
+}
+
+.word-input {
+	width: 100%;
+	display: flex;
+	justify-items: stretch;
+}
+
+.advanced {
+	align-items: baseline;
+	justify-items: space-between;
+}

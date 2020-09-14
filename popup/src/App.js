@@ -1,5 +1,16 @@
 /* global browser */
 import React, { useState, useEffect } from "react";
+import {
+	createMuiTheme,
+	Chip,
+	IconButton,
+	Input,
+	Switch,
+	ThemeProvider,
+	Typography
+} from "@material-ui/core";
+import { Add } from "@material-ui/icons";
+import "./App.css";
 
 function App() {
 	const [ advanced, setAdvanced ] = useState(undefined);
@@ -7,6 +18,7 @@ function App() {
 	const [ word, setWord ] = useState("");
 	const [ regex, setRegex ] = useState(undefined);
 	const [ flags, setFlags ] = useState(undefined);
+	const [ darkMode, setDarkMode ] = useState(undefined);
 	function removeWord(idx) {
 		setWords([...words.slice(0, idx), ...words.slice(idx+1)]);
 	}
@@ -22,7 +34,8 @@ function App() {
 			advanced: [ setAdvanced, false ],
 			words: [ setWords, ["attendance", "roll number", "present"] ],
 			regex: [ setRegex, "" ],
-			flags: [ setFlags, "" ]
+			flags: [ setFlags, "" ],
+			darkMode: [setDarkMode, false]
 		};
 		Object.keys(setterDefaultValue).forEach(key => {
 			const [ setter, defaultValue ] = setterDefaultValue[key];
@@ -65,95 +78,99 @@ function App() {
 		browser.storage.local.get("flags")
 			.then((() => flags !== undefined && browser.storage.local.set({ flags: flags })));
 	}, [flags]);
+	useEffect(() => {
+		browser.storage.local.get("darkMode")
+			.then(() => {
+				if (darkMode === undefined)
+					return;
+				browser.storage.local.set({ darkMode });
+				document.querySelector("body").style.backgroundColor = darkMode ? "#424242" : "#FFFFFF";
+			});
+	}, [darkMode]);
 	// Show Loading till all values are synced from storage to state
-	if ([advanced, words, regex, flags].map(i => i === undefined).reduce((i, j) => i || j))
+	if ([advanced, words, regex, flags, darkMode].map(i => i === undefined).reduce((i, j) => i || j))
 		return <div>Loading</div>;
+
+	const theme = createMuiTheme({
+		palette: {
+			type: darkMode ? "dark": "light",
+		}
+	});
 	return (
-		<>
-			<input
-				type="checkbox"
-				id="toggle"
-				onChange={e => setAdvanced(e.target.checked)}
-				checked={advanced}
-			/>
-			<label forName="toggle">Advanced Mode</label>
+		<ThemeProvider theme={theme}>
+			<div className="toggle">
+				<label forName="toggle">
+					<Typography variant="body1" color="textPrimary">
+						Advanced Mode
+					</Typography>
+				</label>
+				<Switch
+					id="toggle"
+					onChange={e => setAdvanced(e.target.checked)}
+					checked={advanced}
+					color="primary"
+				/>
+			</div>
+			<div className="toggle">
+				<label forName="toggle-dark">
+					<Typography variant="body1" color="textPrimary">
+						Dark Mode
+					</Typography>
+				</label>
+				<Switch
+					id="toggle-dark"
+					onChange={e => setDarkMode(e.target.checked)}
+					checked={darkMode}
+					color="primary"
+				/>
+			</div>
 			<div className="simple"
 				style={{
 					display: advanced ? "none": "block"
 				}}
 			>
-				<div
-					className="words"
-					style={{
-						display: "flex",
-						flexWrap: "wrap",
-						margin: "0.3em",
-						width: "100%"
-					}}
-				>
+				<div className="words">
 					{words.map((word, idx) =>
-						<span
+						<Chip
+							label={word}
 							className="word"
 							key={idx}
-							style={{
-								backgroundColor: "#B4FFEF",
-								borderRadius: "1em",
-								padding: "0.25em 0.5em",
-								margin: "0.1em"
-							}}
-						>
-							{word}
-							<span
-								onClick={() => (removeWord(idx))}
-								role="img"
-								aria-label="Delete word"
-								style={{
-									cursor: "pointer"
-								}}
-							>
-								✗
-							</span>
-						</span>
+							onDelete={() => (removeWord(idx))}
+						/>
 					)}
 				</div>
 				<form>
-					<div
-						style={{
-							width: "100%",
-							display: "flex",
-							justifyItems: "stretch"
-						}}
-					>
-						<input
+					<div className="word-input">
+						<Input
 							id="add-word"
 							type="text"
 							value={word}
 							onInput={e => setWord(e.target.value)}
-							placeholder="Word"
+							placeholder="Enter phrase to match and send notification"
 							style={{
 								flexGrow: 1,
 							}}
 						/>
-						<button
+						<IconButton
 							id="add-word-button"
 							onClick={e => {setWords([...words, word]); setWord(""); e.preventDefault();}}
 							type="submit"
 							disabled={word === ""}
+							color="primary"
+							variant="contained"
 						>
-							+
-						</button>
+							<Add />
+						</IconButton>
 					</div>
 				</form>
 			</div>
 			<div className="advanced"
 				style={{
 					display: advanced ? "flex": "none",
-					alignItems: "baseline",
-					justifyItems: "space-between"
 				}}
 			>
-				/
-				<input
+				<Typography variant="body1" color="textPrimary">/</Typography>
+				<Input
 					id="add-regex"
 					type="text"
 					value={regex}
@@ -163,8 +180,8 @@ function App() {
 						width: "85%"
 					}}
 				/>
-				/
-				<input
+				<Typography variant="body1" color="textPrimary">/</Typography>
+				<Input
 					id="add-flags"
 					type="text"
 					value={flags}
@@ -175,7 +192,7 @@ function App() {
 					}}
 				/>
 			</div>
-		</>
+		</ThemeProvider>
 	);
 }
 
