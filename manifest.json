@@ -27,6 +27,6 @@
 			"matches": ["https://meet.google.com/*"],
 			"js": ["gmcr.js"]
 		}
-	]
-
+	],
+	"web_accessible_resources": ["static/*"]
 }

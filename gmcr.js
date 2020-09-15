@@ -59,6 +59,8 @@ function captionUpdate() {
 			if (matched && surroundingText !== lastNotification) {
 				new Notification("Match found", {body: surroundingText});
 				lastNotification = surroundingText;
+				const audio = new Audio(browser.runtime.getURL("static/notif.mp3"));
+				audio.play();
 			}
 		})
 }
