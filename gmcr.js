@@ -13,7 +13,6 @@ function surroundText(haystack, wordList, padding) {
 			surroundingText += "...";
 
 		surroundingText += "<br>";
-		console.log(start, end, surroundingText);
 	});
 	return surroundingText.trim();
 }
@@ -52,15 +51,15 @@ function captionUpdate() {
 			} else {
 				[ matched, surroundingText ] = simpleMatch(captions, storage.words);
 			}
-			console.log(matched, surroundingText);
 			/* The lastNotification prevents repetitive notifications because
 			 * of constant updates.
 			 */
 			if (matched && surroundingText !== lastNotification) {
-				new Notification("Match found", {body: surroundingText});
+				browser.runtime.sendMessage({
+					type: "match",
+					match: surroundingText
+				});
 				lastNotification = surroundingText;
-				const audio = new Audio(browser.runtime.getURL("static/notif.mp3"));
-				audio.play();
 			}
 		})
 }
